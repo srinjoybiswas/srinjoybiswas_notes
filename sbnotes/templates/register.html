@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center tracking-wide">
+  Create Your SB Notes Account
+</h2>
+
+<p class="text-gray-600 text-center max-w-xl mx-auto mb-8">
+  Enter your basic details. Your login credentials will be sent to your email
+  automatically. After that, you can login and access all notes & syllabus.
+</p>
+
+<div class="max-w-xl mx-auto bg-white rounded-xl shadow p-6">
+
+  <form method="POST" class="grid gap-5">
+
+    <!-- NAME -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+      <input name="name" type="text"
+             placeholder="Enter your first name"
+             required
+             class="w-full border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-gray-900 focus:outline-none">
+    </div>
+
+    <!-- SURNAME -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Surname</label>
+      <input name="surname" type="text"
+             placeholder="Enter your surname"
+             required
+             class="w-full border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-gray-900 focus:outline-none">
+    </div>
+
+    <!-- MOBILE -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Mobile Number</label>
+      <input name="mobile" type="text"
+             placeholder="10-digit mobile number"
+             required
+             class="w-full border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-gray-900 focus:outline-none">
+    </div>
+
+    <!-- EMAIL -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+      <input name="email" type="email"
+             placeholder="Enter your email"
+             required
+             class="w-full border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-gray-900 focus:outline-none">
+    </div>
+
+    <!-- BUTTON -->
+    <button
+        class="w-full bg-gray-900 text-white py-2 rounded-lg shadow
+               hover:bg-gray-800 transition">
+      Register & Receive Login Email
+    </button>
+
+    <!-- Already Have Account -->
+    <p class="text-center text-sm text-gray-600 mt-2">
+      Already registered?
+      <a href="{{ url_for('login') }}" class="text-gray-900 font-medium hover:underline">
+        Login here
+      </a>
+    </p>
+
+  </form>
+
+</div>
+
+{% endblock %}

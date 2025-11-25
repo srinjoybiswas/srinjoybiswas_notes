@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- HERO SECTION -->
+<div class="text-center mt-12">
+    <h1 class="text-4xl font-extrabold text-gray-900">
+        Welcome to <span class="text-blue-600">SB Notes</span>
+    </h1>
+
+    <p class="max-w-2xl mx-auto text-gray-600 mt-4 text-lg">
+        A clean, fast and secure platform to access department-wise notes, syllabus,
+        semester content and study materials. Register once and get your login details
+        in email automatically.
+    </p>
+
+    <div class="mt-8 flex justify-center gap-4">
+        <a href="{{ url_for('login') }}"
+           class="px-6 py-2 bg-gray-900 text-white rounded-lg shadow hover:bg-gray-800 transition">
+           Login
+        </a>
+        <a href="{{ url_for('register') }}"
+           class="px-6 py-2 border border-gray-900 text-gray-900 rounded-lg shadow hover:bg-gray-100 transition">
+           Register
+        </a>
+    </div>
+
+    <div class="mt-10 flex justify-center">
+        <img src="https://cdn-icons-png.flaticon.com/512/906/906341.png"
+             alt="Notes Icon"
+             class="w-64 opacity-90">
+    </div>
+</div>
+
+{% endblock %}

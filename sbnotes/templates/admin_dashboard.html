@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="text-3xl font-bold text-gray-900 mb-6 tracking-wide">
+  Admin Dashboard
+</h2>
+
+<p class="text-gray-600 mb-8">
+  Welcome, Admin. Manage departments, semesters, subjects, syllabus and notes from here.
+</p>
+
+<!-- Stats Boxes -->
+<div class="grid md:grid-cols-2 gap-6 mb-10">
+
+  <!-- Departments Count -->
+  <div class="bg-white shadow border border-gray-200 p-6 rounded-xl">
+    <div class="text-5xl font-bold text-blue-700">{{ departments|length }}</div>
+    <div class="mt-2 text-gray-500 font-medium">Total Departments</div>
+  </div>
+
+  <!-- Notes Count -->
+  <div class="bg-white shadow border border-gray-200 p-6 rounded-xl">
+    <div class="text-5xl font-bold text-green-700">{{ notes|length }}</div>
+    <div class="mt-2 text-gray-500 font-medium">Total Notes Uploaded</div>
+  </div>
+
+</div>
+
+<!-- Navigation Cards -->
+<div class="grid md:grid-cols-3 gap-6">
+
+  <!-- Manage Departments -->
+  <a href="{{ url_for('admin_departments') }}"
+     class="bg-white hover:bg-gray-50 border border-gray-200 shadow p-6 rounded-xl block transition">
+    <div class="text-xl font-semibold text-gray-900 mb-2">Manage Departments</div>
+    <p class="text-gray-600 text-sm">
+      Add or delete departments, semesters and subjects.
+    </p>
+  </a>
+
+  <!-- Manage Notes -->
+  <a href="{{ url_for('admin_notes') }}"
+     class="bg-white hover:bg-gray-50 border border-gray-200 shadow p-6 rounded-xl block transition">
+    <div class="text-xl font-semibold text-gray-900 mb-2">Upload / Manage Notes</div>
+    <p class="text-gray-600 text-sm">
+      Upload notes for any subject and semester.
+    </p>
+  </a>
+
+  <!-- Logout -->
+  <a href="{{ url_for('admin_logout') }}"
+     class="bg-white hover:bg-gray-50 border border-gray-200 shadow p-6 rounded-xl block transition">
+    <div class="text-xl font-semibold text-gray-900 mb-2">Logout</div>
+    <p class="text-gray-600 text-sm">
+      Logout from the admin panel.
+    </p>
+  </a>
+
+</div>
+
+{% endblock %}

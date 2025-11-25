@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- TOP BAR -->
+<div class="flex items-center justify-between bg-gray-900 text-white px-4 py-2 rounded-t-xl shadow-md">
+  <div class="text-xs sm:text-sm font-medium">
+    User ID: {{ session.get('user_id') }}
+  </div>
+  <div id="currentTime" class="text-xs sm:text-sm"></div>
+</div>
+
+<!-- PROGRESS BAR -->
+<div class="h-1 bg-gray-200 rounded-b-lg overflow-hidden mb-4">
+  <div id="scrollProgress" class="h-full bg-gray-900 w-0"></div>
+</div>
+
+<!-- PDF READER CONTAINER -->
+<div id="readerContainer"
+     class="relative bg-white shadow rounded-xl overflow-hidden h-[80vh] border border-gray-200">
+
+  <!-- WATERMARK -->
+  <div class="pointer-events-none select-none absolute inset-0 flex justify-center items-center opacity-20 z-10">
+    <div class="text-3xl font-bold text-gray-500 rotate-[-30deg] tracking-wide text-center leading-tight">
+      {{ session.get('name') }} {{ session.get('surname') }}<br>
+      {{ session.get('email') }}
+    </div>
+  </div>
+
+  <!-- FIX: Edge blocks sandbox — removed sandbox -->
+  <!-- FIX: Added allow="fullscreen" & referrerpolicy -->
+  <iframe
+    src="{{ note.file_path }}#toolbar=0"
+    class="w-full h-full relative z-0"
+    allow="fullscreen; display-capture"
+    referrerpolicy="no-referrer"
+    style="border:none;"
+  ></iframe>
+
+</div>
+
+<!-- SECURITY & PROGRESS SCRIPT -->
+<script>
+// Live Clock
+function updateTime() {
+  const now = new Date();
+  document.getElementById("currentTime").innerText = now.toLocaleTimeString();
+}
+setInterval(updateTime, 1000);
+updateTime();
+
+// Progress Bar
+const reader = document.getElementById("readerContainer");
+const bar = document.getElementById("scrollProgress");
+
+reader.addEventListener("scroll", () => {
+  let pos = reader.scrollTop;
+  let height = reader.scrollHeight - reader.clientHeight;
+  let progress = (pos / height) * 100;
+  bar.style.width = progress + "%";
+});
+
+// Security (No right click)
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+// Block copy, cut, paste
+["copy","cut","paste"].forEach(evt => {
+  document.addEventListener(evt, e => e.preventDefault());
+});
+
+// Block print, save, screenshot shortcuts
+document.addEventListener("keydown", function(e) {
+  if (e.key === "PrintScreen") {
+    alert("Screenshots are disabled.");
+    return false;
+  }
+  if (e.ctrlKey && e.key === "p") {
+    alert("Printing is disabled.");
+    e.preventDefault();
+    return false;
+  }
+  if (e.ctrlKey && e.key === "s") {
+    alert("Saving is disabled.");
+    e.preventDefault();
+    return false;
+  }
+  if (e.ctrlKey && e.key === "c") {
+    alert("Copy is disabled.");
+    e.preventDefault();
+    return false;
+  }
+});
+</script>
+
+{% endblock %}

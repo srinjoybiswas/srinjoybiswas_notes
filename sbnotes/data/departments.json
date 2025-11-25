@@ -1,0 +1,22 @@
+{
+  "departments": [
+    {
+      "id": "bca",
+      "name": "BCA",
+      "semesters": [
+        {
+          "id": "sem1",
+          "name": "Semester 1",
+          "subjects": [],
+          "syllabus_pdf": "/uploads/syllabus/bca_sem1.pdf"
+        },
+        {
+          "id": "sem2",
+          "name": "Computer Architecture",
+          "subjects": [],
+          "syllabus_pdf": ""
+        }
+      ]
+    }
+  ]
+}

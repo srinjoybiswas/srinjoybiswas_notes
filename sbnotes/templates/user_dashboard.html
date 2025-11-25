@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="text-3xl font-bold text-gray-900 mb-6 tracking-wide">
+  Welcome, {{ session.name }} {{ session.surname }} 👋
+</h2>
+
+<p class="text-gray-600 mb-8">
+  Browse departments, view semester syllabus, and access available notes.
+</p>
+
+<!-- DEPARTMENTS LIST -->
+<h3 class="text-2xl font-semibold text-gray-900 mb-4">Departments</h3>
+
+{% if departments|length == 0 %}
+  <p class="text-gray-500">No departments available yet.</p>
+{% endif %}
+
+<div class="space-y-8">
+
+  {% for dept in departments %}
+  <div class="bg-white border border-gray-200 rounded-xl shadow p-6">
+
+    <h4 class="text-xl font-bold text-gray-900 mb-4">
+      {{ dept.name }} 
+      <span class="text-gray-500 text-sm">({{ dept.id }})</span>
+    </h4>
+
+    <!-- SEMESTERS -->
+    <h5 class="text-lg font-semibold mb-2">Semesters</h5>
+
+    {% if dept.semesters|length == 0 %}
+      <p class="text-gray-500 text-sm">No semesters added yet.</p>
+    {% endif %}
+
+    <div class="grid md:grid-cols-2 gap-4">
+      {% for sem in dept.semesters %}
+      <div class="bg-gray-50 border border-gray-300 rounded-lg p-4">
+
+        <h6 class="font-semibold text-gray-900 mb-2">
+          {{ sem.name }} 
+          <span class="text-gray-500 text-sm">({{ sem.id }})</span>
+        </h6>
+
+        <!-- SYLLABUS -->
+        {% if sem.syllabus_pdf %}
+          <a href="{{ sem.syllabus_pdf }}" 
+             target="_blank"
+             class="text-blue-700 text-sm hover:underline mb-3 block">
+            📄 View Syllabus
+          </a>
+        {% else %}
+          <p class="text-gray-500 text-sm mb-3">No syllabus uploaded.</p>
+        {% endif %}
+
+        <!-- SUBJECTS -->
+        <p class="font-medium text-gray-700 mb-1">Subjects</p>
+
+        {% if sem.subjects|length == 0 %}
+          <p class="text-gray-500 text-sm">No subjects available.</p>
+        {% endif %}
+
+        <ul class="space-y-2">
+          {% for sub in sem.subjects %}
+          <li class="bg-white p-2 rounded border border-gray-300">
+            <div class="flex items-center justify-between">
+
+              <!-- Subject Name -->
+              <span>{{ sub.name }} 
+                <span class="text-gray-500 text-sm">({{ sub.id }})</span>
+              </span>
+
+            </div>
+
+            <!-- NOTE LIST -->
+            <div class="mt-2">
+
+              {% set subject_notes = notes | selectattr('subject_id', 'equalto', sub.id) 
+                                             | selectattr('semester_id', 'equalto', sem.id)
+                                             | selectattr('dept_id', 'equalto', dept.id)
+                                             | list %}
+
+              {% if subject_notes|length == 0 %}
+                <p class="text-gray-500 text-xs">No notes uploaded.</p>
+              {% else %}
+                <ul class="space-y-1">
+                  {% for note in subject_notes %}
+                  <li class="flex justify-between items-center bg-gray-100 p-2 rounded">
+
+                    <span class="text-sm font-medium">{{ note.title }}</span>
+
+                    <a href="{{ url_for('read_note', note_id=note.id) }}"
+                       class="text-blue-700 text-xs hover:underline">
+                      Read →
+                    </a>
+
+                  </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+
+            </div>
+
+          </li>
+          {% endfor %}
+        </ul>
+
+      </div>
+      {% endfor %}
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
+

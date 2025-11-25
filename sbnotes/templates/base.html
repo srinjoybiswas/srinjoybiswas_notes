@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SB Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100">
+
+    <!-- NAVBAR -->
+    <nav class="bg-gray-900 text-white px-6 py-4 shadow flex justify-between items-center">
+        
+        <!-- Logo -->
+        <a href="{{ url_for('index') }}" class="text-2xl font-bold tracking-wide">
+            SB NOTES
+        </a>
+
+        <!-- Right side links -->
+        <div class="flex items-center gap-6 text-sm font-medium">
+
+            <!-- Normal User Links -->
+            <a href="{{ url_for('login') }}" class="hover:text-blue-400 transition">Login</a>
+            <a href="{{ url_for('register') }}" class="hover:text-blue-400 transition">Register</a>
+
+            <!-- Admin Login (NEW BUTTON) -->
+            <a href="{{ url_for('admin_login') }}" 
+               class="hover:text-yellow-300 transition">
+               Admin
+            </a>
+
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="max-w-5xl mx-auto py-10">
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

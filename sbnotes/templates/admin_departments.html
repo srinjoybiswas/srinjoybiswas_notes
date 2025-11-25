@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="text-3xl font-bold text-gray-900 mb-6 tracking-wide">
+  Manage Departments • Semesters • Subjects
+</h2>
+
+<p class="text-gray-600 mb-8">
+  Add departments, semesters, subjects, and upload syllabus. All changes are saved automatically to JSON.
+</p>
+
+<!-- ADD DEPARTMENT -->
+<div class="bg-white shadow p-6 rounded-xl border border-gray-200 mb-10">
+  <h3 class="text-xl font-semibold mb-4">Add New Department</h3>
+
+  <form method="POST" action="{{ url_for('admin_departments') }}" class="grid gap-4">
+    <input type="hidden" name="action" value="add_dept">
+
+    <input name="dept_id"
+           placeholder="Department ID (e.g. bca, bba, bcom)"
+           required
+           class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-gray-900">
+
+    <input name="name"
+           placeholder="Department Name (e.g. Bachelor of Computer Applications)"
+           required
+           class="border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-gray-900">
+
+    <button class="bg-gray-900 text-white px-4 py-2 rounded-lg shadow hover:bg-gray-800">
+      Add Department
+    </button>
+  </form>
+</div>
+
+<!-- EXISTING DEPARTMENTS -->
+<h3 class="text-2xl font-semibold text-gray-900 mb-4">Existing Departments</h3>
+
+{% if data.departments|length == 0 %}
+  <p class="text-gray-500">No departments added yet.</p>
+{% endif %}
+
+<div class="grid gap-8">
+
+  {% for dept in data.departments %}
+  <div class="bg-white shadow p-6 rounded-xl border border-gray-200">
+
+    <!-- Department Header -->
+    <div class="flex justify-between items-center">
+      <h4 class="text-xl font-bold">
+        {{ dept.name }} <span class="text-gray-500">({{ dept.id }})</span>
+      </h4>
+
+      <!-- Delete Department -->
+      <form method="POST" action="{{ url_for('admin_departments') }}">
+        <input type="hidden" name="action" value="delete_dept">
+        <input type="hidden" name="dept_id" value="{{ dept.id }}">
+        <button class="text-red-600 text-sm hover:underline">Delete</button>
+      </form>
+    </div>
+
+    <!-- SEMESTERS SECTION -->
+    <div class="mt-6">
+      <h5 class="text-lg font-semibold mb-3">Semesters</h5>
+
+      <!-- Add Semester -->
+      <form method="POST" action="{{ url_for('admin_semesters') }}" class="flex gap-4 mb-4">
+        <input type="hidden" name="action" value="add_sem">
+        <input type="hidden" name="dept_id" value="{{ dept.id }}">
+
+        <input name="sem_id"
+               placeholder="Semester ID (e.g. sem1)"
+               required
+               class="border border-gray-300 rounded-lg p-2 flex-1 focus:ring-2 focus:ring-gray-900">
+
+        <input name="sem_name"
+               placeholder="Semester Name (e.g. Semester 1)"
+               required
+               class="border border-gray-300 rounded-lg p-2 flex-1 focus:ring-2 focus:ring-gray-900">
+
+        <button class="bg-blue-700 text-white px-4 rounded-lg hover:bg-blue-600">
+          Add
+        </button>
+      </form>
+
+      {% if dept.semesters|length == 0 %}
+        <p class="text-sm text-gray-500 mb-4">No semesters added yet.</p>
+      {% endif %}
+
+      <div class="space-y-6">
+        {% for sem in dept.semesters %}
+        <div class="bg-gray-50 border border-gray-300 p-4 rounded-xl">
+
+          <!-- Semester Header -->
+          <div class="flex justify-between items-center">
+            <div>
+              <div class="font-semibold text-gray-900">
+                {{ sem.name }} <span class="text-gray-500">({{ sem.id }})</span>
+              </div>
+            </div>
+
+            <!-- Delete Semester -->
+            <form method="POST" action="{{ url_for('admin_semesters') }}">
+              <input type="hidden" name="action" value="delete_sem">
+              <input type="hidden" name="dept_id" value="{{ dept.id }}">
+              <input type="hidden" name="sem_id" value="{{ sem.id }}">
+              <button class="text-red-600 text-sm hover:underline">Delete</button>
+            </form>
+          </div>
+
+          <!-- SUBJECT SECTION -->
+          <div class="mt-4">
+            <h6 class="font-semibold mb-2">Subjects</h6>
+
+            <!-- Add Subject -->
+            <form method="POST" action="{{ url_for('admin_subjects') }}" class="flex gap-3 mb-3">
+              <input type="hidden" name="action" value="add_subject">
+              <input type="hidden" name="dept_id" value="{{ dept.id }}">
+              <input type="hidden" name="sem_id" value="{{ sem.id }}">
+
+              <input name="sub_id"
+                     placeholder="Subject ID (e.g. python)"
+                     required
+                     class="border border-gray-300 rounded p-2 flex-1">
+
+              <input name="sub_name"
+                     placeholder="Subject Name (e.g. Python Programming)"
+                     required
+                     class="border border-gray-300 rounded p-2 flex-1">
+
+              <button class="bg-green-700 text-white px-3 rounded hover:bg-green-600">
+                Add
+              </button>
+            </form>
+
+            {% if sem.subjects|length == 0 %}
+              <p class="text-sm text-gray-500 mb-2">No subjects added.</p>
+            {% endif %}
+
+            <ul class="space-y-2">
+              {% for sub in sem.subjects %}
+              <li class="flex justify-between bg-white p-2 rounded border">
+                <span>
+                  {{ sub.name }} <span class="text-gray-500">({{ sub.id }})</span>
+                </span>
+
+                <!-- Delete Subject -->
+                <form method="POST" action="{{ url_for('admin_subjects') }}">
+                  <input type="hidden" name="action" value="delete_subject">
+                  <input type="hidden" name="dept_id" value="{{ dept.id }}">
+                  <input type="hidden" name="sem_id" value="{{ sem.id }}">
+                  <input type="hidden" name="sub_id" value="{{ sub.id }}">
+                  <button class="text-red-600 text-sm hover:underline">Delete</button>
+                </form>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <!-- SYLLABUS UPLOAD -->
+          <div class="mt-5">
+            <h6 class="font-semibold mb-1">Upload Syllabus</h6>
+
+            <form method="POST" action="{{ url_for('admin_syllabus') }}" enctype="multipart/form-data" class="flex items-center gap-3">
+              <input type="hidden" name="dept_id" value="{{ dept.id }}">
+              <input type="hidden" name="sem_id" value="{{ sem.id }}">
+
+              <label class="bg-gray-900 text-white text-sm py-2 px-3 rounded cursor-pointer hover:bg-gray-800">
+                Select PDF
+                <input type="file" name="syllabus_pdf" accept="application/pdf" class="hidden" required>
+              </label>
+
+              <button class="bg-blue-700 text-white px-3 py-2 rounded hover:bg-blue-600">
+                Upload
+              </button>
+            </form>
+
+            {% if sem.syllabus_pdf %}
+              <p class="text-sm text-gray-600 mt-1">
+                Current File:
+                <a href="{{ sem.syllabus_pdf }}" target="_blank" class="text-blue-700 hover:underline">
+                  View PDF
+                </a>
+              </p>
+            {% endif %}
+          </div>
+
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}
